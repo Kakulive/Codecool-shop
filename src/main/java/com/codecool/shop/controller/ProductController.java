@@ -4,6 +4,7 @@ import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.service.ProductService;
 import com.codecool.shop.config.TemplateEngineUtil;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(urlPatterns = {"/"})
@@ -33,8 +35,19 @@ public class ProductController extends HttpServlet {
         ProductCategory defaultCategory = productService.getDefaultProductCategory();
         context.setVariable("defaultCategory", defaultCategory);
         context.setVariable("defaultCategoryProducts",productService.getProductsForCategory(defaultCategory.getId()));
-        context.setVariable("category", productService.getProductCategory(2));
-        context.setVariable("products", productService.getProductsForCategory(2)); //TODO iterate through categories
+
+        List<ProductCategory> allCategories = productService.getAllCategories();
+        HashMap<ProductCategory,List<Product>> categoriesWithProducts = new HashMap<>();
+
+        for (ProductCategory category : allCategories){
+            categoriesWithProducts.put(category,productService.getProductsForCategory(category.getId()));
+        }
+
+        context.setVariable("categoriesWithProducts", categoriesWithProducts);
+
+//        context.setVariable("category", productService.getProductCategory(2));
+//        context.setVariable("products", productService.getProductsForCategory(2)); //TODO iterate through categories
+
         // // Alternative setting of the template context
         // Map<String, Object> params = new HashMap<>();
         // params.put("category", productCategoryDataStore.find(1));
