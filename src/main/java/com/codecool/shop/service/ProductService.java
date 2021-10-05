@@ -16,6 +16,10 @@ public class ProductService{
         this.productCategoryDao = productCategoryDao;
     }
 
+    public ProductCategory getDefaultProductCategory(){
+        return productCategoryDao.getDefaultCategory();
+    }
+
     public ProductCategory getProductCategory(int categoryId){
         return productCategoryDao.find(categoryId);
     }

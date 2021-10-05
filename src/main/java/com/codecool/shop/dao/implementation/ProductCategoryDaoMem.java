@@ -6,8 +6,11 @@ import com.codecool.shop.model.ProductCategory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ProductCategoryDaoMem implements ProductCategoryDao {
+
+    private static final int DEFAULT_CATEGORY_INDEX = 0;
 
     private List<ProductCategory> data = new ArrayList<>();
     private static ProductCategoryDaoMem instance = null;
@@ -43,5 +46,10 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
     @Override
     public List<ProductCategory> getAll() {
         return data;
+    }
+
+    @Override
+    public ProductCategory getDefaultCategory() {
+        return data.get(DEFAULT_CATEGORY_INDEX);
     }
 }
