@@ -8,7 +8,7 @@ function toggleCategories() {
 
 function toggleHidden(event) {
     event.preventDefault();
-    event.target.parentElement.parentNode.children[1].classList.toggle("hidden");
+    event.target.parentElement.parentNode.children[1].classList.toggle("hidden-content");
 }
 
 toggleCategories();
