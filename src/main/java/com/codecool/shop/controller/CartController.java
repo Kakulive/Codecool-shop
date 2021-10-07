@@ -25,8 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet(urlPatterns = {"/"})
-public class ProductController extends HttpServlet {
+@WebServlet(urlPatterns = {"/cart"})
+public class CartController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,26 +40,12 @@ public class ProductController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
-        ProductCategory defaultCategory = productService.getDefaultProductCategory();
-        List<Product> defaultCategoryProducts = productService.getProductsForCategory(defaultCategory.getId());
-        context.setVariable("defaultCategory", defaultCategory);
-        context.setVariable("defaultCategoryProducts",defaultCategoryProducts);
-
-        List<ProductCategory> allCategories = productService.getAllCategories();
-        HashMap<ProductCategory,List<Product>> categoriesWithProducts = new HashMap<>();
-
-        for (ProductCategory category : allCategories){
-            categoriesWithProducts.put(category,productService.getProductsForCategory(category.getId()));
-        }
-
-        context.setVariable("categoriesWithProducts", categoriesWithProducts);
-
         // // Alternative setting of the template context
         // Map<String, Object> params = new HashMap<>();
         // params.put("category", productCategoryDataStore.find(1));
         // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
         // context.setVariables(params);
-        engine.process("product/index.html", context, resp.getWriter());
+        engine.process("product/cart.html", context, resp.getWriter());
     }
 
 }
