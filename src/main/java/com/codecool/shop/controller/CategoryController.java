@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @WebServlet(urlPatterns = {"/category"})
 public class CategoryController extends HttpServlet {
@@ -55,11 +56,6 @@ public class CategoryController extends HttpServlet {
         List<Supplier> selectedCategorySuppliers = productService.getSuppliersForCategory(selectedCategory);
         context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
 
-        // // Alternative setting of the template context
-        // Map<String, Object> params = new HashMap<>();
-        // params.put("category", productCategoryDataStore.find(1));
-        // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
-        // context.setVariables(params);
         engine.process("product/category.html", context, resp.getWriter());
     }
 
@@ -91,11 +87,12 @@ public class CategoryController extends HttpServlet {
         List<Supplier> selectedCategorySuppliers = FilteringAssistant.getSuppliersFromCheckbox(req, allSupplierList);
         context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
 
-        // // Alternative setting of the template context
-        // Map<String, Object> params = new HashMap<>();
-        // params.put("category", productCategoryDataStore.find(1));
-        // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
-        // context.setVariables(params);
+        String addedProductName = req.getParameter("productName");
+        if (!Objects.equals(addedProductName, "")){
+            Product addedProduct = productService.getProductByName(addedProductName);
+            productService.addProductToCart(addedProduct);
+        }
+
         engine.process("product/category.html", context, resp.getWriter());
     }
 

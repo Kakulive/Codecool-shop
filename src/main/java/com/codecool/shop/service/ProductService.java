@@ -61,5 +61,13 @@ public class ProductService{
         return categorySuppliers;
     }
 
+    public void addProductToCart(Product product){
+        cartDao.add(product);
+    }
+
+    public Product getProductByName(String name){
+        return productDao.find(name);
+    }
+
 
 }

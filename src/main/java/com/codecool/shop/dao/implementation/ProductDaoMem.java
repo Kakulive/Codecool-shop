@@ -8,6 +8,7 @@ import com.codecool.shop.model.Supplier;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ProductDaoMem implements ProductDao {
@@ -36,6 +37,11 @@ public class ProductDaoMem implements ProductDao {
     @Override
     public Product find(int id) {
         return data.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    }
+
+    @Override
+    public Product find(String name) {
+        return data.stream().filter(t -> Objects.equals(t.getName(), name)).findFirst().orElse(null);
     }
 
     @Override

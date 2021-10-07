@@ -24,9 +24,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @WebServlet(urlPatterns = {"/"})
-public class ProductController extends HttpServlet {
+public class IndexController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -59,6 +60,41 @@ public class ProductController extends HttpServlet {
         // params.put("category", productCategoryDataStore.find(1));
         // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
         // context.setVariables(params);
+        engine.process("product/index.html", context, resp.getWriter());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ProductDao productDataStore = ProductDaoMem.getInstance();
+        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        CartDao cartDao = CartDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
+                supplierDataStore, cartDao);
+
+        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        ProductCategory defaultCategory = productService.getDefaultProductCategory();
+        List<Product> defaultCategoryProducts = productService.getProductsForCategory(defaultCategory.getId());
+        context.setVariable("defaultCategory", defaultCategory);
+        context.setVariable("defaultCategoryProducts",defaultCategoryProducts);
+
+        List<ProductCategory> allCategories = productService.getAllCategories();
+        HashMap<ProductCategory,List<Product>> categoriesWithProducts = new HashMap<>();
+
+        for (ProductCategory category : allCategories){
+            categoriesWithProducts.put(category,productService.getProductsForCategory(category.getId()));
+        }
+
+        context.setVariable("categoriesWithProducts", categoriesWithProducts);
+
+        String addedProductName = req.getParameter("productName");
+        if (!Objects.equals(addedProductName, "")){
+            Product addedProduct = productService.getProductByName(addedProductName);
+            productService.addProductToCart(addedProduct);
+        }
+
         engine.process("product/index.html", context, resp.getWriter());
     }
 
