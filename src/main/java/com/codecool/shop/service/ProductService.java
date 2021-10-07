@@ -1,5 +1,6 @@
 package com.codecool.shop.service;
 
+import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
@@ -14,11 +15,14 @@ public class ProductService{
     private ProductDao productDao;
     private ProductCategoryDao productCategoryDao;
     private SupplierDao supplierDao;
+    private CartDao cartDao;
 
-    public ProductService(ProductDao productDao, ProductCategoryDao productCategoryDao, SupplierDao supplierDao) {
+    public ProductService(ProductDao productDao, ProductCategoryDao productCategoryDao, SupplierDao supplierDao,
+                          CartDao cartDao) {
         this.productDao = productDao;
         this.productCategoryDao = productCategoryDao;
         this.supplierDao = supplierDao;
+        this.cartDao = cartDao;
     }
 
     public ProductCategory getDefaultProductCategory(){
@@ -55,6 +59,14 @@ public class ProductService{
             }
         }
         return categorySuppliers;
+    }
+
+    public void addProductToCart(Product product){
+        cartDao.add(product);
+    }
+
+    public Product getProductByName(String name){
+        return productDao.find(name);
     }
 
 

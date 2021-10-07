@@ -1,6 +1,5 @@
 package com.codecool.shop.controller;
 
-import com.codecool.shop.Utils.FilteringAssistant;
 import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
@@ -11,7 +10,6 @@ import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
-import com.codecool.shop.model.Supplier;
 import com.codecool.shop.service.ProductService;
 import com.codecool.shop.config.TemplateEngineUtil;
 import org.thymeleaf.TemplateEngine;
@@ -23,11 +21,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
-@WebServlet(urlPatterns = {"/category"})
-public class CategoryController extends HttpServlet {
+@WebServlet(urlPatterns = {"/"})
+public class IndexController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,22 +41,26 @@ public class CategoryController extends HttpServlet {
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
-        String categoryName = req.getParameter("name");
-        context.setVariable("categoryName", categoryName);
+        ProductCategory defaultCategory = productService.getDefaultProductCategory();
+        List<Product> defaultCategoryProducts = productService.getProductsForCategory(defaultCategory.getId());
+        context.setVariable("defaultCategory", defaultCategory);
+        context.setVariable("defaultCategoryProducts",defaultCategoryProducts);
 
-        ProductCategory selectedCategory = productService.getProductCategoryByName(categoryName);
-        context.setVariable("category", selectedCategory);
+        List<ProductCategory> allCategories = productService.getAllCategories();
+        HashMap<ProductCategory,List<Product>> categoriesWithProducts = new HashMap<>();
 
-        List<Product> selectedCategoryProducts = productService.getProductsForCategory(selectedCategory.getId());
-        context.setVariable("categoryProducts", selectedCategoryProducts);
+        for (ProductCategory category : allCategories){
+            categoriesWithProducts.put(category,productService.getProductsForCategory(category.getId()));
+        }
 
-        List<Supplier> suppliersList = productService.getSuppliersForCategory(selectedCategory);
-        context.setVariable("suppliersList", suppliersList);
+        context.setVariable("categoriesWithProducts", categoriesWithProducts);
 
-        List<Supplier> selectedCategorySuppliers = productService.getSuppliersForCategory(selectedCategory);
-        context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
-
-        engine.process("product/category.html", context, resp.getWriter());
+        // // Alternative setting of the template context
+        // Map<String, Object> params = new HashMap<>();
+        // params.put("category", productCategoryDataStore.find(1));
+        // params.put("products", productDataStore.getBy(productCategoryDataStore.find(1)));
+        // context.setVariables(params);
+        engine.process("product/index.html", context, resp.getWriter());
     }
 
     @Override
@@ -65,27 +69,25 @@ public class CategoryController extends HttpServlet {
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
         CartDao cartDao = CartDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore,productCategoryDataStore,
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
                 supplierDataStore, cartDao);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
 
-        String categoryName = req.getParameter("name");
-        context.setVariable("categoryName", categoryName);
+        ProductCategory defaultCategory = productService.getDefaultProductCategory();
+        List<Product> defaultCategoryProducts = productService.getProductsForCategory(defaultCategory.getId());
+        context.setVariable("defaultCategory", defaultCategory);
+        context.setVariable("defaultCategoryProducts",defaultCategoryProducts);
 
-        ProductCategory selectedCategory = productService.getProductCategoryByName(categoryName);
-        context.setVariable("category", selectedCategory);
+        List<ProductCategory> allCategories = productService.getAllCategories();
+        HashMap<ProductCategory,List<Product>> categoriesWithProducts = new HashMap<>();
 
-        List<Product> selectedCategoryProducts = productService.getProductsForCategory(selectedCategory.getId());
-        context.setVariable("categoryProducts", selectedCategoryProducts);
+        for (ProductCategory category : allCategories){
+            categoriesWithProducts.put(category,productService.getProductsForCategory(category.getId()));
+        }
 
-        List<Supplier> suppliersList = productService.getSuppliersForCategory(selectedCategory);
-        context.setVariable("suppliersList", suppliersList);
-
-        List<Supplier> allSupplierList = productService.getAllSuppliers();
-        List<Supplier> selectedCategorySuppliers = FilteringAssistant.getSuppliersFromCheckbox(req, allSupplierList);
-        context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
+        context.setVariable("categoriesWithProducts", categoriesWithProducts);
 
         String addedProductName = req.getParameter("productName");
         if (!Objects.equals(addedProductName, "")){
@@ -93,7 +95,7 @@ public class CategoryController extends HttpServlet {
             productService.addProductToCart(addedProduct);
         }
 
-        engine.process("product/category.html", context, resp.getWriter());
+        engine.process("product/index.html", context, resp.getWriter());
     }
 
 }

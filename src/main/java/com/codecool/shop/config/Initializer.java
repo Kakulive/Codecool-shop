@@ -1,8 +1,10 @@
 package com.codecool.shop.config;
 
+import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
 import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.implementation.CartDaoMem;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
@@ -23,6 +25,7 @@ public class Initializer implements ServletContextListener {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        CartDao cartDao = CartDaoMem.getInstance();
 
         //setting up a new supplier
         Supplier amazon = new Supplier("Amazon", "Digital content and services");
@@ -66,7 +69,7 @@ public class Initializer implements ServletContextListener {
         productDataStore.add(new Product("Amazon Fire HD 8", new BigDecimal("89"), "USD", "Amazon's latest Fire HD 8 tablet is a great value for media consumption.", tablets, amazon));
         productDataStore.add(new Product("Blue Yeti 3-Capsule USB Microphone - Slate", new BigDecimal("239"), "USD", "Create unparalleled recordings directly in your computer with Blue Microphone's Yeti USB Microphone.", microphones, blue));
         productDataStore.add(new Product("Blue Snowball Professional USB Microphone - Black", new BigDecimal("139"), "USD", "Create studio-quality recordings with Blue Microphone's Snowball, a USB microphone with exceptional sound-capture capabilities.", microphones, blue));
-        productDataStore.add(new Product("Elgato WAVE:3 Premium Microphone", new BigDecimal("289"), "USD", "Quality content requires excellent sound. You need a broadcast-grade microphone that plugs directly into your setup, and a mixer to blend audio sources with ease. Meet Wave:3 — your complete solution.", microphones, elgato));
+        productDataStore.add(new Product("Elgato WAVE 3 Premium Microphone", new BigDecimal("289"), "USD", "Quality content requires excellent sound. You need a broadcast-grade microphone that plugs directly into your setup, and a mixer to blend audio sources with ease. Meet Wave:3 — your complete solution.", microphones, elgato));
         productDataStore.add(new Product("Razer Kiyo Pro Webcam", new BigDecimal("349"), "USD", "USB Camera with High-Performance Adaptive Light Sensor.", webcams, razer));
         productDataStore.add(new Product("MICROSOFT WEBCAM LIFECAM HD-3000", new BigDecimal("79"), "USD", "This true HD camera gives you bright and colourful video, and makes it easy to post to your favourite social sites.", webcams, microsoft));
         productDataStore.add(new Product("Logitech StreamCam Full HD USB-C Webcam - Graphite", new BigDecimal("319"), "USD", "Logitech StreamCam Full HD USB-C Webcam - Graphite - Connection: USB 3.1 Gen 1 Type-C (1.5 Metre Cable) - Max Video.", webcams, logitech));

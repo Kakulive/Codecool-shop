@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HtmlSorter {
+public class FilteringAssistant {
 
     public static List<Supplier> getSuppliersFromCheckbox (HttpServletRequest req, List<Supplier> allSupplierList){
         List<Supplier> selectedSuppliers = new ArrayList<>();
