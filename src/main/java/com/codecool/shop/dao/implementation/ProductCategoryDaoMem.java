@@ -7,6 +7,7 @@ import com.codecool.shop.model.ProductCategory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class ProductCategoryDaoMem implements ProductCategoryDao {
 
@@ -36,6 +37,11 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
     @Override
     public ProductCategory find(int id) {
         return data.stream().filter(t -> t.getId() == id).findFirst().orElse(null);
+    }
+
+    @Override
+    public ProductCategory findByName(String categoryName) {
+        return data.stream().filter(t -> Objects.equals(t.getName(), categoryName)).findFirst().orElse(null);
     }
 
     @Override

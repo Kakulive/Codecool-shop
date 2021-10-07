@@ -2,8 +2,10 @@ package com.codecool.shop.controller;
 
 import com.codecool.shop.dao.ProductCategoryDao;
 import com.codecool.shop.dao.ProductDao;
+import com.codecool.shop.dao.SupplierDao;
 import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
+import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.service.ProductService;
@@ -28,13 +30,16 @@ public class ProductController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
-        ProductService productService = new ProductService(productDataStore,productCategoryDataStore);
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore,productCategoryDataStore, supplierDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
+
         ProductCategory defaultCategory = productService.getDefaultProductCategory();
+        List<Product> defaultCategoryProducts = productService.getProductsForCategory(defaultCategory.getId());
         context.setVariable("defaultCategory", defaultCategory);
-        context.setVariable("defaultCategoryProducts",productService.getProductsForCategory(defaultCategory.getId()));
+        context.setVariable("defaultCategoryProducts",defaultCategoryProducts);
 
         List<ProductCategory> allCategories = productService.getAllCategories();
         HashMap<ProductCategory,List<Product>> categoriesWithProducts = new HashMap<>();
@@ -44,9 +49,6 @@ public class ProductController extends HttpServlet {
         }
 
         context.setVariable("categoriesWithProducts", categoriesWithProducts);
-
-//        context.setVariable("category", productService.getProductCategory(2));
-//        context.setVariable("products", productService.getProductsForCategory(2)); //TODO iterate through categories
 
         // // Alternative setting of the template context
         // Map<String, Object> params = new HashMap<>();
