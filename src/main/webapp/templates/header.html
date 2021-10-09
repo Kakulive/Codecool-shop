@@ -3,8 +3,17 @@
 <body>
 
 <div th:fragment="copy">
+    <nav class="navbar navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="/">Kinda Cool Shop</a>
+        <form class="form-inline">
+            <a class="btn btn-outline-danger my-2 my-sm-0" href="/cart">Shopping Cart
+                <span class="badge badge-primary badge-pill"
+                      th:text="${cartItems.size()}">Amount</span>
+            </a>
+        </form>
+    </nav>
     <div class="jumbotron text-center">
-        <h1>Codecool Shop</h1>
+        <h1>Kinda Cool Shop</h1>
     </div>
 </div>
 

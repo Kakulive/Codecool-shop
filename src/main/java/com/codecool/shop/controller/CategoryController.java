@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -56,6 +57,9 @@ public class CategoryController extends HttpServlet {
         List<Supplier> selectedCategorySuppliers = productService.getSuppliersForCategory(selectedCategory);
         context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
 
+        List<Product> allCartItems = productService.getAllCartItems();
+        context.setVariable("cartItems", allCartItems);
+
         engine.process("product/category.html", context, resp.getWriter());
     }
 
@@ -86,6 +90,9 @@ public class CategoryController extends HttpServlet {
         List<Supplier> allSupplierList = productService.getAllSuppliers();
         List<Supplier> selectedCategorySuppliers = FilteringAssistant.getSuppliersFromCheckbox(req, allSupplierList);
         context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
+
+        List<Product> allCartItems = productService.getAllCartItems();
+        context.setVariable("cartItems", allCartItems);
 
         String addedProductName = req.getParameter("productName");
         if (!Objects.equals(addedProductName, "")){

@@ -50,7 +50,7 @@
                 <a th:href="@{/category(name=${category.getKey().getName()})}">
                     <strong th:text="${category.getKey().getName()}">Category Title</strong>
                 </a>
-                <span class="badge badge-primary badge-pill"
+                <span class="badge badge-danger badge-pill"
                       th:text="${category.getKey().getProducts().size()}">Amount</span>
             </li>
         </ul>

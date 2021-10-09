@@ -4,7 +4,9 @@ import com.codecool.shop.dao.CartDao;
 import com.codecool.shop.model.Cart;
 import com.codecool.shop.model.Product;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CartDaoMem implements CartDao {
@@ -38,4 +40,28 @@ public class CartDaoMem implements CartDao {
     public List<Product> getAll() {
         return cartItems;
     }
+
+    @Override
+    public HashMap<Product, Integer> getCartItemsQuantities(){
+        HashMap<Product, Integer> cartItemsQuantities = new HashMap<>();
+        for (Product item : cartItems){
+            if (!cartItemsQuantities.containsKey(item)){
+                cartItemsQuantities.put(item, 1);
+            } else {
+                cartItemsQuantities.put(item, cartItemsQuantities.get(item)+1);
+            }
+        }
+        return cartItemsQuantities;
+    }
+
+    @Override
+    public BigDecimal getTotalPrice(){
+        BigDecimal totalPrice = new BigDecimal("0");
+        for (Product item : cartItems){
+            totalPrice = totalPrice.add(item.getDefaultPrice());
+        }
+        return totalPrice;
+    }
+
+
 }

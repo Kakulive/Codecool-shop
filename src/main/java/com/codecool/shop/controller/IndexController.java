@@ -21,10 +21,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @WebServlet(urlPatterns = {"/"})
 public class IndexController extends HttpServlet {
@@ -48,6 +45,9 @@ public class IndexController extends HttpServlet {
 
         List<ProductCategory> allCategories = productService.getAllCategories();
         HashMap<ProductCategory,List<Product>> categoriesWithProducts = new HashMap<>();
+
+        List<Product> allCartItems = productService.getAllCartItems();
+        context.setVariable("cartItems", allCartItems);
 
         for (ProductCategory category : allCategories){
             categoriesWithProducts.put(category,productService.getProductsForCategory(category.getId()));
@@ -88,6 +88,9 @@ public class IndexController extends HttpServlet {
         }
 
         context.setVariable("categoriesWithProducts", categoriesWithProducts);
+
+        List<Product> allCartItems = productService.getAllCartItems();
+        context.setVariable("cartItems", allCartItems);
 
         String addedProductName = req.getParameter("productName");
         if (!Objects.equals(addedProductName, "")){
