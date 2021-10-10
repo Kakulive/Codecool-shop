@@ -9,7 +9,6 @@ import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
 import com.codecool.shop.dao.implementation.ProductDaoMem;
 import com.codecool.shop.dao.implementation.SupplierDaoMem;
 import com.codecool.shop.model.Product;
-import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.service.ProductService;
 import com.codecool.shop.config.TemplateEngineUtil;
 import org.thymeleaf.TemplateEngine;
@@ -21,9 +20,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 @WebServlet(urlPatterns = {"/cart"})
 public class CartController extends HttpServlet {
@@ -39,6 +39,50 @@ public class CartController extends HttpServlet {
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        List<Product> allCartItems = productService.getAllCartItems();
+        context.setVariable("cartItems", allCartItems);
+
+        HashSet<Product> cartItemsWithoutDuplicates = productService.getCartItemsWithoutDuplicates();
+        context.setVariable("cartItemsWithoutDuplicates", cartItemsWithoutDuplicates);
+
+        HashMap<Product, Integer> cartItemsQuantities = productService.getCartItemsQuantities();
+        context.setVariable("cartItemsQuantities", cartItemsQuantities);
+
+        BigDecimal totalPrice = productService.getTotalPrice();
+        context.setVariable("totalPrice", totalPrice);
+
+        engine.process("product/cart.html", context, resp.getWriter());
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ProductDao productDataStore = ProductDaoMem.getInstance();
+        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        CartDao cartDao = CartDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
+                supplierDataStore, cartDao);
+
+        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        String changedProductName = (String) req.getParameterMap().keySet().toArray()[0];
+        int changedQuantity = Integer.parseInt(req.getParameter(changedProductName));
+
+        productService.updateCart(changedProductName, changedQuantity);
+
+        List<Product> allCartItems = productService.getAllCartItems();
+        context.setVariable("cartItems", allCartItems);
+
+        HashSet<Product> cartItemsWithoutDuplicates = productService.getCartItemsWithoutDuplicates();
+        context.setVariable("cartItemsWithoutDuplicates", cartItemsWithoutDuplicates);
+
+        HashMap<Product, Integer> cartItemsQuantities = productService.getCartItemsQuantities();
+        context.setVariable("cartItemsQuantities", cartItemsQuantities);
+
+        BigDecimal totalPrice = productService.getTotalPrice();
+        context.setVariable("totalPrice", totalPrice);
 
         engine.process("product/cart.html", context, resp.getWriter());
     }

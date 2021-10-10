@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class ProductCategoryDaoMem implements ProductCategoryDao {
 
-    private static final int DEFAULT_CATEGORY_INDEX = 0;
+    private static final String DEFAULT_CATEGORY_NAME = "Keyboards";
 
     private List<ProductCategory> data = new ArrayList<>();
     private static ProductCategoryDaoMem instance = null;
@@ -56,6 +56,6 @@ public class ProductCategoryDaoMem implements ProductCategoryDao {
 
     @Override
     public ProductCategory getDefaultCategory() {
-        return data.get(DEFAULT_CATEGORY_INDEX);
+        return findByName(DEFAULT_CATEGORY_NAME);
     }
 }

@@ -35,11 +35,47 @@
 
 <div th:replace="header.html :: copy"></div>
 
-<h1>Hello World</h1>
+<div>
+    <h2 class="text-center">Cart</h2>
+</div>
+
+<table class="table table-striped text-center">
+    <thead>
+    <tr>
+        <th scope="col">Product name</th>
+        <th scope="col">Image</th>
+        <th scope="col">Unit Price</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Price</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="prod,iterStat : ${cartItemsWithoutDuplicates}">
+        <td class="align-middle" th:text="${prod.getName()}">Product name</td>
+        <td class="align-middle">
+            <img class="" src="http://placehold.it/400x250/000/fff"
+                 th:attr="src='/static/img/' + ${prod.getName()} + '.jpg'" alt="" width="100px" height="100px"/>
+        </td>
+        <td class="align-middle" th:text="${prod.getPrice()}">Unit Price</td>
+        <td>
+            <form action="" method="post">
+                <input class="quantity-input" type="text"
+                       th:value="${cartItemsQuantities.get(prod)}" th:name="${prod.getName()}">
+                <label class="quantity-input-label" th:for="${prod.getName()}"></label>
+            </form>
+        </td>
+        <td class="align-middle" th:text="${cartItemsQuantities.get(prod) * prod.getDefaultPrice()}">Price</td>
+    </tr>
+    <tr>
+        <td class="align-middle" colspan="4"><strong>Total Price</strong></td>
+        <td class="align-middle" th:text="${totalPrice}">Price</td>
+    </tr>
+    </tbody>
+</table>
 
 <div th:replace="footer.html :: copy"></div>
 
-<script src="static/scripts/index.js" defer></script>
+<script src="static/scripts/cart.js" defer></script>
 
 </body>
 </html>
