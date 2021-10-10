@@ -15,4 +15,5 @@ public interface CartDao {
     List<Product> getAll();
     HashMap<Product, Integer> getCartItemsQuantities();
     BigDecimal getTotalPrice();
+    void updateCart(Product changedProduct, int quantity);
 }

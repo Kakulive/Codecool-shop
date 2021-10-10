@@ -42,25 +42,51 @@ public class CartDaoMem implements CartDao {
     }
 
     @Override
-    public HashMap<Product, Integer> getCartItemsQuantities(){
+    public HashMap<Product, Integer> getCartItemsQuantities() {
         HashMap<Product, Integer> cartItemsQuantities = new HashMap<>();
-        for (Product item : cartItems){
-            if (!cartItemsQuantities.containsKey(item)){
+        for (Product item : cartItems) {
+            if (!cartItemsQuantities.containsKey(item)) {
                 cartItemsQuantities.put(item, 1);
             } else {
-                cartItemsQuantities.put(item, cartItemsQuantities.get(item)+1);
+                cartItemsQuantities.put(item, cartItemsQuantities.get(item) + 1);
             }
         }
         return cartItemsQuantities;
     }
 
     @Override
-    public BigDecimal getTotalPrice(){
+    public BigDecimal getTotalPrice() {
         BigDecimal totalPrice = new BigDecimal("0");
-        for (Product item : cartItems){
+        for (Product item : cartItems) {
             totalPrice = totalPrice.add(item.getDefaultPrice());
         }
         return totalPrice;
+    }
+
+    @Override
+    public void updateCart(Product changedProduct, int quantity) {
+        HashMap<Product, Integer> cartItemQuantities = getCartItemsQuantities();
+        int itemsAlreadyInCart = cartItemQuantities.get(changedProduct);
+
+        if (itemsAlreadyInCart == quantity) {
+            return;
+        }
+
+        int quantityDifference = Math.abs(itemsAlreadyInCart - quantity);
+        if (quantity <= 0) {
+            for (int i = 0; i < itemsAlreadyInCart; i++) {
+                cartItems.remove(changedProduct);
+            }
+        } else if (quantity > 0 && quantity < itemsAlreadyInCart) {
+            for (int i = 0; i < quantityDifference; i++) {
+                cartItems.remove(changedProduct);
+            }
+        } else {
+            for (int i = 0; i < quantityDifference; i++) {
+                cartItems.add(changedProduct);
+            }
+        }
+
     }
 
 

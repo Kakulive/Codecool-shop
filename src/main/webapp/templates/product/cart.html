@@ -57,7 +57,13 @@
                  th:attr="src='/static/img/' + ${prod.getName()} + '.jpg'" alt="" width="100px" height="100px"/>
         </td>
         <td class="align-middle" th:text="${prod.getPrice()}">Unit Price</td>
-        <td class="align-middle" th:text="${cartItemsQuantities.get(prod)}">Quantity</td>
+        <td>
+            <form action="" method="post">
+                <input class="quantity-input" type="text"
+                       th:value="${cartItemsQuantities.get(prod)}" th:name="${prod.getName()}">
+                <label class="quantity-input-label" th:for="${prod.getName()}"></label>
+            </form>
+        </td>
         <td class="align-middle" th:text="${cartItemsQuantities.get(prod) * prod.getDefaultPrice()}">Price</td>
     </tr>
     <tr>
@@ -68,6 +74,8 @@
 </table>
 
 <div th:replace="footer.html :: copy"></div>
+
+<script src="static/scripts/cart.js" defer></script>
 
 </body>
 </html>

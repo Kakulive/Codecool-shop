@@ -55,4 +55,36 @@ public class CartController extends HttpServlet {
         engine.process("product/cart.html", context, resp.getWriter());
     }
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        ProductDao productDataStore = ProductDaoMem.getInstance();
+        ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
+        SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
+        CartDao cartDao = CartDaoMem.getInstance();
+        ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
+                supplierDataStore, cartDao);
+
+        TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
+        WebContext context = new WebContext(req, resp, req.getServletContext());
+
+        String changedProductName = (String) req.getParameterMap().keySet().toArray()[0];
+        int changedQuantity = Integer.parseInt(req.getParameter(changedProductName));
+
+        productService.updateCart(changedProductName, changedQuantity);
+
+        List<Product> allCartItems = productService.getAllCartItems();
+        context.setVariable("cartItems", allCartItems);
+
+        HashSet<Product> cartItemsWithoutDuplicates = productService.getCartItemsWithoutDuplicates();
+        context.setVariable("cartItemsWithoutDuplicates", cartItemsWithoutDuplicates);
+
+        HashMap<Product, Integer> cartItemsQuantities = productService.getCartItemsQuantities();
+        context.setVariable("cartItemsQuantities", cartItemsQuantities);
+
+        BigDecimal totalPrice = productService.getTotalPrice();
+        context.setVariable("totalPrice", totalPrice);
+
+        engine.process("product/cart.html", context, resp.getWriter());
+    }
+
 }

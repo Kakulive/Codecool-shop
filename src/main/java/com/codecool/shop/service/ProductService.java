@@ -90,5 +90,10 @@ public class ProductService {
         return cartDao.getTotalPrice();
     }
 
+    public void updateCart(String productName, int quantity){
+        Product changedProduct = productDao.find(productName);
+        cartDao.updateCart(changedProduct, quantity);
+    }
+
 
 }
