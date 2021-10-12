@@ -34,9 +34,9 @@ public class PaymentController extends HttpServlet {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        CartDao cartDao = CartDaoMem.getInstance();
+        CartDao cartDataStore = CartDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
-                supplierDataStore, cartDao);
+                supplierDataStore, cartDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -61,10 +61,14 @@ public class PaymentController extends HttpServlet {
         setVariableFromFormDataField(req, context, "shippingInputState");
         setVariableFromFormDataField(req, context, "shippingInputZip");
 
-
+        BigDecimal totalPrice = productService.getTotalPrice();
+        context.setVariable("totalPrice", totalPrice);
 
         List<Product> allCartItems = productService.getAllCartItems();
         context.setVariable("cartItems", allCartItems);
+
+        String paypalClientId = System.getenv("client_id");
+        context.setVariable("paypalClientId", paypalClientId);
 
         engine.process("product/payment.html", context, resp.getWriter());
     }
