@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="author" content="Codecool"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+
+    <title>Checkout</title>
+
+    <!-- Bootstrap components -->
+    <!-- Latest compiled and minified Jquery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+    <!--Latest compiled and minified Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+            crossorigin="anonymous"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <!-- End of Bootstrap components -->
+
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css"/>
+
+</head>
+
+<body>
+
+<div th:replace="header.html :: copy"></div>
+
+<div>
+    <h2 class="text-center">Checkout</h2>
+</div>
+
+<form action="/payment" method="post">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputName">Name</label>
+            <input type="text" class="form-control" name="inputName" id="inputName" placeholder="Name">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputSurname">Surname</label>
+            <input type="text" class="form-control" name="inputSurname" id="inputSurname" placeholder="Surname">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label for="inputEmail">Email</label>
+            <input type="email" class="form-control" name="inputEmail" id="inputEmail" placeholder="Email">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputPassword">Password</label>
+            <input type="password" class="form-control" name="inputPassword" id="inputPassword" placeholder="Password">
+        </div>
+    </div>
+
+    <hr>
+
+    <h3 class="text-center">Billing Address</h3>
+    <div class="form-group">
+        <label for="billingInputAddress1">Address</label>
+        <input type="text" class="form-control" name="billingInputAddress1" id="billingInputAddress1" placeholder="1234 Main St">
+    </div>
+    <div class="form-group">
+        <label for="billingInputAddress2">Address 2</label>
+        <input type="text" class="form-control" name="billingInputAddress2" id="billingInputAddress2" placeholder="Apartment, studio, or floor">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="billingInputCountry">Country</label>
+            <input type="text" class="form-control" name="billingInputCountry" id="billingInputCountry">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="billingInputCity">City</label>
+            <input type="text" class="form-control" name="billingInputCity" id="billingInputCity">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="billingInputState">State</label>
+            <select name="billingInputState" id="billingInputState" class="form-control">
+                <option>Dolnoslaskie</option>
+                <option>Kujawsko-Pomorskie</option>
+                <option>Lubelskie</option>
+                <option>Lubuskie</option>
+                <option>Lodzkie</option>
+                <option selected>Malopolskie</option>
+                <option>Mazowieckie</option>
+                <option>Opolskie</option>
+                <option>Podkarpackie</option>
+                <option>Podlaskie</option>
+                <option>Pomorskie</option>
+                <option>Slaskie</option>
+                <option>Swietokrzyskie</option>
+                <option>Warminsko-Mazurskie</option>
+                <option>Wielkopolskie</option>
+                <option>Zachodniopomorskie</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="billingInputZip">Zip Code</label>
+            <input type="text" class="form-control" name="billingInputZip" id="billingInputZip">
+        </div>
+    </div>
+
+    <hr>
+
+    <h3 class="text-center">Shipping Address</h3>
+    <div class="form-group">
+        <label for="shippingInputAddress1">Address</label>
+        <input type="text" class="form-control" name="shippingInputAddress1" id="shippingInputAddress1" placeholder="1234 Main St">
+    </div>
+    <div class="form-group">
+        <label for="shippingInputAddress2">Address 2</label>
+        <input type="text" class="form-control" name="shippingInputAddress2" id="shippingInputAddress2" placeholder="Apartment, studio, or floor">
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="shippingInputCountry">Country</label>
+            <input type="text" class="form-control" name="shippingInputCountry" id="shippingInputCountry">
+        </div>
+        <div class="form-group col-md-4">
+            <label for="shippingInputCity">City</label>
+            <input type="text" class="form-control" name="shippingInputCity" id="shippingInputCity">
+        </div>
+        <div class="form-group col-md-3">
+            <label for="shippingInputState">State</label>
+            <select name="shippingInputState" id="shippingInputState" class="form-control">
+                <option>Dolnoslaskie</option>
+                <option>Kujawsko-Pomorskie</option>
+                <option>Lubelskie</option>
+                <option>Lubuskie</option>
+                <option>Lodzkie</option>
+                <option selected>Malopolskie</option>
+                <option>Mazowieckie</option>
+                <option>Opolskie</option>
+                <option>Podkarpackie</option>
+                <option>Podlaskie</option>
+                <option>Pomorskie</option>
+                <option>Slaskie</option>
+                <option>Swietokrzyskie</option>
+                <option>Warminsko-Mazurskie</option>
+                <option>Wielkopolskie</option>
+                <option>Zachodniopomorskie</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <label for="shippingInputZip">Zip Code</label>
+            <input type="text" class="form-control" name="shippingInputZip" id="shippingInputZip">
+        </div>
+    </div>
+
+    <div class="d-flex flex-row-reverse">
+        <button type="submit" class="btn btn-primary">Go to payment</button>
+    </div>
+</form>
+
+
+<div th:replace="footer.html :: copy"></div>
+
+</body>
+</html>

@@ -35,9 +35,9 @@ public class CategoryController extends HttpServlet {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        CartDao cartDao = CartDaoMem.getInstance();
+        CartDao cartDataStore = CartDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
-                supplierDataStore, cartDao);
+                supplierDataStore, cartDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -51,8 +51,8 @@ public class CategoryController extends HttpServlet {
         List<Product> selectedCategoryProducts = productService.getProductsForCategory(selectedCategory.getId());
         context.setVariable("categoryProducts", selectedCategoryProducts);
 
-        List<Supplier> suppliersList = productService.getSuppliersForCategory(selectedCategory);
-        context.setVariable("suppliersList", suppliersList);
+        List<Supplier> categorySuppliersList = productService.getSuppliersForCategory(selectedCategory);
+        context.setVariable("suppliersList", categorySuppliersList);
 
         List<Supplier> selectedCategorySuppliers = productService.getSuppliersForCategory(selectedCategory);
         context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
@@ -68,9 +68,9 @@ public class CategoryController extends HttpServlet {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        CartDao cartDao = CartDaoMem.getInstance();
+        CartDao cartDataStore = CartDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore,productCategoryDataStore,
-                supplierDataStore, cartDao);
+                supplierDataStore, cartDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -84,21 +84,23 @@ public class CategoryController extends HttpServlet {
         List<Product> selectedCategoryProducts = productService.getProductsForCategory(selectedCategory.getId());
         context.setVariable("categoryProducts", selectedCategoryProducts);
 
-        List<Supplier> suppliersList = productService.getSuppliersForCategory(selectedCategory);
-        context.setVariable("suppliersList", suppliersList);
+        List<Supplier> categorySuppliersList = productService.getSuppliersForCategory(selectedCategory);
+        context.setVariable("suppliersList", categorySuppliersList);
 
         List<Supplier> allSupplierList = productService.getAllSuppliers();
         List<Supplier> selectedCategorySuppliers = FilteringAssistant.getSuppliersFromCheckbox(req, allSupplierList);
+
+        String addedProductName = req.getParameter("productName");
+        if (!Objects.equals(addedProductName, null)){
+            Product addedProduct = productService.getProductByName(addedProductName);
+            productService.addProductToCart(addedProduct);
+            selectedCategorySuppliers = categorySuppliersList;
+        }
+
         context.setVariable("selectedCategorySuppliers", selectedCategorySuppliers);
 
         List<Product> allCartItems = productService.getAllCartItems();
         context.setVariable("cartItems", allCartItems);
-
-        String addedProductName = req.getParameter("productName");
-        if (!Objects.equals(addedProductName, "")){
-            Product addedProduct = productService.getProductByName(addedProductName);
-            productService.addProductToCart(addedProduct);
-        }
 
         engine.process("product/category.html", context, resp.getWriter());
     }

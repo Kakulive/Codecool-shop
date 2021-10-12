@@ -5,7 +5,7 @@
     <meta name="author" content="Codecool"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-    <title>Cart</title>
+    <title>Payment</title>
 
     <!-- Bootstrap components -->
     <!-- Latest compiled and minified Jquery -->
@@ -32,54 +32,23 @@
 </head>
 
 <body>
-
 <div th:replace="header.html :: copy"></div>
 
 <div>
-    <h2 class="text-center">Cart</h2>
+    <h2 class="text-center">Payment</h2>
 </div>
 
-<table class="table table-striped text-center">
-    <thead>
-    <tr>
-        <th scope="col">Product name</th>
-        <th scope="col">Image</th>
-        <th scope="col">Unit Price</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="prod,iterStat : ${cartItemsWithoutDuplicates}">
-        <td class="align-middle" th:text="${prod.getName()}">Product name</td>
-        <td class="align-middle">
-            <img class="" src="http://placehold.it/400x250/000/fff"
-                 th:attr="src='/static/img/' + ${prod.getName()} + '.jpg'" alt="" width="100px" height="100px"/>
-        </td>
-        <td class="align-middle" th:text="${prod.getPrice()}">Unit Price</td>
-        <td>
-            <form action="" method="post">
-                <input class="quantity-input" type="text"
-                       th:value="${cartItemsQuantities.get(prod)}" th:name="${prod.getName()}">
-                <label class="quantity-input-label" th:for="${prod.getName()}"></label>
-            </form>
-        </td>
-        <td class="align-middle" th:text="${cartItemsQuantities.get(prod) * prod.getDefaultPrice()}">Price</td>
-    </tr>
-    <tr>
-        <td class="align-middle" colspan="4"><strong>Total Price</strong></td>
-        <td class="align-middle" th:text="${totalPrice}">Price</td>
-    </tr>
-    </tbody>
-</table>
-
-<div class="d-flex flex-row-reverse">
-    <a class="btn btn-outline-success my-2 my-sm-0" href="/checkout">Checkout</a>
+<div>
+    <h3 class="text-center">Amount to pay:</h3>
+    <h4 class="text-center" id="amountToPay" th:name="totalPrice" th:value="${totalPrice}" th:text="${totalPrice}"></h4> USD
 </div>
+
+<div class="d-flex justify-content-center" id="paypal-div"></div>
 
 <div th:replace="footer.html :: copy"></div>
 
-<script src="static/scripts/cart.js" defer></script>
 
+<script th:src="${'https://www.paypal.com/sdk/js?client-id=' + paypalClientId}"></script>
+<script src="static/scripts/paypal.js" defer></script>
 </body>
 </html>

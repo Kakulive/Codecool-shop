@@ -31,9 +31,9 @@ public class IndexController extends HttpServlet {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        CartDao cartDao = CartDaoMem.getInstance();
+        CartDao cartDataStore = CartDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
-                supplierDataStore, cartDao);
+                supplierDataStore, cartDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -68,9 +68,9 @@ public class IndexController extends HttpServlet {
         ProductDao productDataStore = ProductDaoMem.getInstance();
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
-        CartDao cartDao = CartDaoMem.getInstance();
+        CartDao cartDataStore = CartDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
-                supplierDataStore, cartDao);
+                supplierDataStore, cartDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
