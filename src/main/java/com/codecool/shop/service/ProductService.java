@@ -1,13 +1,15 @@
 package com.codecool.shop.service;
 
-import com.codecool.shop.dao.CartDao;
-import com.codecool.shop.dao.ProductCategoryDao;
-import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.SupplierDao;
+import com.codecool.shop.dao.*;
+import com.codecool.shop.model.Order;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.model.Supplier;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,13 +21,19 @@ public class ProductService {
     private ProductCategoryDao productCategoryDao;
     private SupplierDao supplierDao;
     private CartDao cartDao;
+    private OrderDao orderDao;
+    Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .serializeNulls()
+            .create();
 
     public ProductService(ProductDao productDao, ProductCategoryDao productCategoryDao, SupplierDao supplierDao,
-                          CartDao cartDao) {
+                          CartDao cartDao, OrderDao orderDao) {
         this.productDao = productDao;
         this.productCategoryDao = productCategoryDao;
         this.supplierDao = supplierDao;
         this.cartDao = cartDao;
+        this.orderDao = orderDao;
     }
 
     public ProductCategory getDefaultProductCategory() {
@@ -95,5 +103,16 @@ public class ProductService {
         cartDao.updateCart(changedProduct, quantity);
     }
 
+    public void saveOrder(Order order){
+        orderDao.add(order);
+    }
+
+    public void saveOrderToJson(Order order) throws IOException {
+        String filePath = "C:\\Users\\Kakuszakak\\Desktop\\TEST\\order_" + order.getId() + ".json";
+        FileWriter writer = new FileWriter(filePath);
+        gson.toJson(order, writer);
+        writer.flush();
+        writer.close();
+    }
 
 }
