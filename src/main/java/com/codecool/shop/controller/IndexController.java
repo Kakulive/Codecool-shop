@@ -1,13 +1,7 @@
 package com.codecool.shop.controller;
 
-import com.codecool.shop.dao.CartDao;
-import com.codecool.shop.dao.ProductCategoryDao;
-import com.codecool.shop.dao.ProductDao;
-import com.codecool.shop.dao.SupplierDao;
-import com.codecool.shop.dao.implementation.CartDaoMem;
-import com.codecool.shop.dao.implementation.ProductCategoryDaoMem;
-import com.codecool.shop.dao.implementation.ProductDaoMem;
-import com.codecool.shop.dao.implementation.SupplierDaoMem;
+import com.codecool.shop.dao.*;
+import com.codecool.shop.dao.implementation.*;
 import com.codecool.shop.model.Product;
 import com.codecool.shop.model.ProductCategory;
 import com.codecool.shop.service.ProductService;
@@ -32,8 +26,9 @@ public class IndexController extends HttpServlet {
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
         CartDao cartDataStore = CartDaoMem.getInstance();
+        OrderDao orderDataStore = OrderDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
-                supplierDataStore, cartDataStore);
+                supplierDataStore, cartDataStore, orderDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
@@ -69,8 +64,9 @@ public class IndexController extends HttpServlet {
         ProductCategoryDao productCategoryDataStore = ProductCategoryDaoMem.getInstance();
         SupplierDao supplierDataStore = SupplierDaoMem.getInstance();
         CartDao cartDataStore = CartDaoMem.getInstance();
+        OrderDao orderDataStore = OrderDaoMem.getInstance();
         ProductService productService = new ProductService(productDataStore, productCategoryDataStore,
-                supplierDataStore, cartDataStore);
+                supplierDataStore, cartDataStore, orderDataStore);
 
         TemplateEngine engine = TemplateEngineUtil.getTemplateEngine(req.getServletContext());
         WebContext context = new WebContext(req, resp, req.getServletContext());
