@@ -8,4 +8,10 @@ public interface OrderDao {
     void add(Order order);
     void remove(Order order);
     List<Order> getAll();
+
+    void setCurrentOrderId(int id);
+
+    int getCurrentOrderId();
+
+    Order getCurrentOrder(int id);
 }

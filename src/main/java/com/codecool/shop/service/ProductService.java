@@ -107,6 +107,18 @@ public class ProductService {
         orderDao.add(order);
     }
 
+    public void setCurrentOrderId(int id){
+        orderDao.setCurrentOrderId(id);
+    }
+
+    public int getCurrentOrderId(){
+        return orderDao.getCurrentOrderId();
+    }
+
+    public Order getCurrentOder(int id){
+        return orderDao.getCurrentOrder(id);
+    }
+
     public void saveOrderToJson(Order order) throws IOException {
         String filePath = "C:\\Users\\Kakuszakak\\Desktop\\TEST\\order_" + order.getId() + ".json";
         FileWriter writer = new FileWriter(filePath);
