@@ -49,10 +49,10 @@ public class PaymentConfirmationController extends HttpServlet {
         HashMap<Product, Integer> cartItemsQuantities = productService.getCartItemsQuantities();
         context.setVariable("cartItemsQuantities", cartItemsQuantities);
 
-        Order order = new Order(allCartItems);
-        productService.saveOrder(order);
-        context.setVariable("order", order);
-        productService.saveOrderToJson(order);
+        int currentOrderId = productService.getCurrentOrderId();
+        Order currentOrder = productService.getCurrentOder(currentOrderId);
+        context.setVariable("order", currentOrder);
+        productService.saveOrderToJson(currentOrder);
 
         engine.process("product/paymentConfirmation.html", context, resp.getWriter());
     }
